@@ -18,6 +18,7 @@ CHI_SQ_INV_95 = 9.4877 # 0.95 quantile of chi-square distribution
 INF_COST = 1e5
 
 
+    # b [M,4]
 class MultiTracker:
     """
     Uses optical flow and Kalman filter to track multiple objects and
