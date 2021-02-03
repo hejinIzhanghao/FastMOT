@@ -1,6 +1,7 @@
 import numpy as np
 import cv2 as cv
 
+from fastmot.utils.rect import to_tlbr
 
 DET_DTYPE = np.dtype(
     [('tlbr', float, 4),
@@ -87,18 +88,16 @@ class Yolo_CV:
         for i in indices:
             i = i[0]
             box = boxes[i]
-            left = box[0]
-            top = box[1]
-            width = box[2]
-            height = box[3]
-            tlbr = [top, left, top + height, left + width]
+            tlbr = to_tlbr(box)
+            tlbr = np.maximum(tlbr, 0)
+            tlbr = np.minimum(tlbr, (frameWidth, frameHeight, frameWidth, frameHeight))
             detections.append((tlbr, classIds[i], confidences[i]))
         detections = np.asarray(detections, dtype=DET_DTYPE).view(np.recarray)
         return detections
 
     def drawDetection(self, frame, detections):
         for det in detections:
-            self._drawPred(frame, det.label, det.conf, int(det.tlbr[1]), int(det.tlbr[0]), int(det.tlbr[3]), int(det.tlbr[2]))
+            self._drawPred(frame, det.label, det.conf, int(det.tlbr[0]), int(det.tlbr[1]), int(det.tlbr[2]), int(det.tlbr[3]))
         return frame
 
     def _drawPred(self, frame, classId, conf, left, top, right, bottom):
