@@ -6,8 +6,7 @@ import numpy as np
 import cv2
 
 import fastmot.utils
-import fastmot.models.yolo_cv
-import fastmot.models.osnet_cv
+import fastmot
 
 
 def main():
@@ -20,8 +19,10 @@ def main():
 
     cv2.namedWindow("IMG", cv2.WINDOW_AUTOSIZE)
 
-    frame = cv2.imread("images/00585.png")
+    frame = cv2.imread("images/111_ir_Moment_2.jpg")
+    frame = np.uint8(255 * np.ones(frame.shape) - frame)
 
+    detections = []
     if frame is not None:
         detections = detector.detect(0, frame)
 
@@ -29,12 +30,8 @@ def main():
     cv2.imshow("IMG", frame)
     cv2.waitKey(0)
 
-    embeddings = []
-    for det in detections:
-        tlbr_ = det.tlbr.astype(np.int)
-        crop = frame[tlbr_[1]:tlbr_[3] + 1, tlbr_[0]:tlbr_[2] + 1]
-        feat = extractor.extract(crop)
-        embeddings.append(feat)
+    embeddings = extractor.extract(frame, detections)
+    print(embeddings)
 
 
 if __name__ == '__main__':
