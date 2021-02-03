@@ -1,4 +1,3 @@
-from .ssd import *
-from .yolo import *
-from .reid import *
+from .yolo_cv import *
+from .osnet_cv import *
 from .label import *
