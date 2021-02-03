@@ -83,8 +83,7 @@ class MOT:
                 self.detector_time += time.perf_counter() - tic
 
                 tic = time.perf_counter()
-                self.extractor.extract(frame, detections)
-                embeddings = self.extractor.postprocess()
+                embeddings = self.extractor.extract(frame, detections)
                 self.extractor_time += time.perf_counter() - tic
 
                 self.tracker.compute_flow(frame)
@@ -93,7 +92,7 @@ class MOT:
                 tic = time.perf_counter()
                 self.tracker.update(self.frame_count, detections, embeddings)
                 self.association_time += time.perf_counter() - tic
-                
+
                 self.detector_frame_count += 1
             else:
                 tic = time.perf_counter()
