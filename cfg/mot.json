@@ -1,15 +1,15 @@
 {   
-    "size": [1280, 720],
+    "size": [640, 512],
 
     "video_io": {
-        "camera_size": [1920, 1080],
+        "camera_size": [640, 512],
         "camera_fps": 30,
         "buffer_size": 10
     },
 
     "mot": {
         "detector_type": "YOLO",
-        "detector_frame_skip": 5,
+        "detector_frame_skip": 3,
 
         "ssd_detector": {
             "model": "SSDInceptionV2",
@@ -32,9 +32,24 @@
             "conf_thresh": 0.5,
             "max_area": 800000
         },
+        "yolo_cv": {
+            "model_weights": "weights/yolov3-irall_500000.weights",
+            "model_cfg": "weights/yolov3-irall.cfg",
+            "classes_file": "weights/yolov3-irall.names",
+            "input_shape": [640, 512],
+            "class_ids": [0,1],
+            "conf_thresh": 0.2,
+            "max_area": 800000,
+            "nms_thresh": 0.4
+        },
         "feature_extractor": {
             "model": "OSNet025",
             "batch_size": 16
+        },
+        "osnet_cv": {
+            "model_weights": "weights/osnet_0x_25.caffemodel",
+            "model_cfg": "weights/osnet_0x_25.prototxt",
+            "input_shape": [64, 128]
         },
 
         "multi_tracker": {
