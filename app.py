@@ -5,6 +5,7 @@ import argparse
 import logging
 import time
 import json
+import numpy as np
 import cv2
 
 import fastmot
@@ -57,15 +58,17 @@ def main():
         tic = time.perf_counter()
         while not args.gui or cv2.getWindowProperty("Video", 0) >= 0:
             frame = stream.read()
+
             if frame is None:
                 break
+            frame = np.uint8(255 * np.ones(frame.shape) - frame)
 
             if args.mot:
                 mot.step(frame)
                 if log is not None:
                     for track in mot.visible_tracks:
                         # MOT17 dataset is usually of size 1920x1080, modify this otherwise
-                        orig_size = (1920, 1080)
+                        orig_size = (640, 512)
                         tl = track.tlbr[:2] / config['size'] * orig_size
                         br = track.tlbr[2:] / config['size'] * orig_size
                         w, h = br - tl + 1
